@@ -46,7 +46,7 @@ test('RahulShetty Lets Shop', async({page})=>{
     const orderText = await page.locator("label[class*='inserted']").textContent();
     const orderId = orderText.split(' | ')[1];
     await page.locator("button[routerlink*='myorders']").click();
-    const orderBody = page.locator("tbody tr");
+    const orderBody = page.locator("tbody");
     await orderBody.first().waitFor();
 
     for(let i=0; i < await orderBody.count(); i++){

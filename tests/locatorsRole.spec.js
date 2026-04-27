@@ -1,5 +1,4 @@
 import {test, expect} from '@playwright/test';
-import { link } from 'fs';
 
 test('get by role locator test', async({browser})=>{
     
