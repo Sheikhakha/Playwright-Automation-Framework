@@ -16,7 +16,7 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   retries: 0,
-  workers: 4,
+  workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   expect:{
