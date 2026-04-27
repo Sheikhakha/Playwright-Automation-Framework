@@ -30,6 +30,7 @@ test('RahulShetty Lets Shop', async({page})=>{
             break;
         }
     }
+    await alert.waitFor('visible');
     await expect(alert).toHaveText(' Product Added To Cart ');
     await cart.click();
     await page.waitForURL('https://rahulshettyacademy.com/client/#/dashboard/cart');
