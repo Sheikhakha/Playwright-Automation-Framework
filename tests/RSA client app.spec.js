@@ -53,7 +53,7 @@ test('RahulShetty Lets Shop', async({page})=>{
 
 
 
-        if(await orderBody.nth(i).locator('th').textContent() === orderId){
+        if(await orderBody.locator('th').nth(i).textContent() === orderId){
             await orderBody.nth(i).locator('button').first().click();
             break;            
         }
