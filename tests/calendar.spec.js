@@ -34,7 +34,7 @@ test('newTab',async ({browser}) => {
     await newPage.waitForEvent('load')
     await expect(newPage).toHaveTitle('RS Academy')
     await newPage.getByRole('link',{name: "Courses"}).click()
-    await newPage.waitForURL('https://courses.rahulshettyacademy.com/courses')
+    await newPage.waitForURL('https://courses.rahulshettyacademy.com/l/products?sortKey=recommended&sortDirection=asc&page=1')
     await expect(newPage).toHaveTitle('Rahul Shetty Academy')  
 
     

@@ -3,6 +3,8 @@ import {test,expect} from '@playwright/test';
 test('newWindow Test', async({browser})=>{
     const context = await browser.newContext();
     const page = await context.newPage();
+    await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
+    await expect(page).toHaveTitle("LoginPage Practise | Rahul Shetty Academy");
     const username = page.locator('#username');
     const password = page.locator('#password');
     const userRadioButton = page.locator('.checkmark').nth(1);
@@ -14,8 +16,8 @@ test('newWindow Test', async({browser})=>{
 
 
 
-    await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
-    await expect(page).toHaveTitle("LoginPage Practise | Rahul Shetty Academy");
+    
+    
     await expect(documents).toHaveAttribute('class','blinkingText');
 
     /* either use promise.all to find the new tab or use the pagePromise 
@@ -40,9 +42,11 @@ test('newWindow Test', async({browser})=>{
     await password.fill('Learning@830$3mK2');
     await userRadioButton.click();
     await okay.click();
+    await expect(okay).toBeHidden();
     await expect(userRadioButton).toBeChecked();
     await select.selectOption('teach');
     await expect(select).toHaveValue('teach');
+    await expect(terms).toBeVisible();
     await terms.check();
     await expect(terms).toBeChecked();
     await terms.uncheck();

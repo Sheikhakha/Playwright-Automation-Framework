@@ -23,13 +23,16 @@ test('RahulShetty Lets Shop', async({page})=>{
     await expect(page).toHaveTitle("Let's Shop");
     await expect(alert).toContainText('Login');
 
-    for(let i=0; i < await products.count(); i++) {
-        console.log(await products.locator('b').nth(i).textContent());
-        if(await products.locator('b').nth(i).textContent()==='iphone 13 pro'){
-          await products.nth(i).locator("text= Add To Cart").click();
-            break;
-        }
-    }
+    // for(let i=0; i < await products.count(); i++) {
+    //     console.log(await products.locator('b').nth(i).textContent());
+    //     if(await products.locator('b').nth(i).textContent()==='iphone 13 pro'){
+    //       await products.nth(i).locator("text= Add To Cart").click();
+    //         break;
+    //     }
+    // }
+
+    await products.filter({has: page.locator('b', {hasText: 'iphone 13 pro'})}).getByRole('button', {name: ' Add To Cart '}).click();
+    await alert.waitFor('visible');
     await expect(alert).toHaveText(' Product Added To Cart ');
     await cart.click();
     await page.waitForURL('https://rahulshettyacademy.com/client/#/dashboard/cart');
@@ -53,7 +56,7 @@ test('RahulShetty Lets Shop', async({page})=>{
 
 
 
-        if(await orderBody.nth(i).locator('th').textContent() === orderId){
+        if(await orderBody.locator('th').nth(i).textContent() === orderId){
             await orderBody.nth(i).locator('button').first().click();
             break;            
         }

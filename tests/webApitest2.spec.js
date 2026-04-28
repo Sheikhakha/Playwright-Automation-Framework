@@ -10,15 +10,15 @@ test.beforeAll(async () => {
     console.log(token)
 
 
-    const orderPayload = {orders: [{country: "Equatorial Guinea", productOrderedId: "67a8dde5c0d3e6622a297cc8"}]}
-    const createOrderResponse = await apiContext.post("https://rahulshettyacademy.com/api/ecom/order/create-order",
-        {data: orderPayload, headers: {
-            'Authorization':token, 
-            'Content-Type': 'application/json'}
-        }
-    )
-    const createOrderResponseJson = await createOrderResponse.json()
-    console.log(createOrderResponseJson.orders[0])
+    // const orderPayload = {orders: [{country: "Equatorial Guinea", productOrderedId: "67a8dde5c0d3e6622a297cc8"}]}
+    // const createOrderResponse = await apiContext.post("https://rahulshettyacademy.com/api/ecom/order/create-order",
+    //     {data: orderPayload, headers: {
+    //         'Authorization':token, 
+    //         'Content-Type': 'application/json'}
+    //     }
+    // )
+    // const createOrderResponseJson = await createOrderResponse.json()
+    // console.log(createOrderResponseJson.orders[0])
 
     
 })
