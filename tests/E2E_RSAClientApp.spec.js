@@ -10,12 +10,17 @@ test('RahulShetty Lets Shop', async({page})=>{
     const products = page.locator('.card-body');
     const cart = page.locator("button[routerlink*='cart']");
 
+    // Navigate to the URL and verify the title
     await page.goto(url)
     await expect(page).toHaveTitle("Let's Shop");
+
+    // Fill invalid credentials and check foe error message
     await userName.fill('sheik@gmail.com');
     await password.fill('Qb@1234511111');
     await login.click();
     await expect(alert).toContainText('Incorrect');
+
+    // Fill valid credentials and verify the title after login
     await password.fill('Qb@12345');
     await login.click();
     await page.waitForLoadState('load');
@@ -31,10 +36,13 @@ test('RahulShetty Lets Shop', async({page})=>{
     //     }
     // }
 
+    // Add iphone to cart and verify alert message.
     await products.filter({has: page.locator('b', {hasText: 'iphone 13 pro'})}).getByRole('button', {name: ' Add To Cart '}).click();
     await alert.waitFor('visible');
     await expect(alert).toHaveText(' Product Added To Cart ');
     await cart.click();
+
+    // Check for product in cart, select country, place the order
     await page.waitForURL('https://rahulshettyacademy.com/client/#/dashboard/cart');
     await expect(page.locator("h3:has-text('IPHONE 13 PRO')")).toBeVisible();
     await page.locator("button[type='button']:has-text('Checkout')").click();
@@ -45,25 +53,29 @@ test('RahulShetty Lets Shop', async({page})=>{
     await page.locator("input[placeholder='Select Country']").pressSequentially('ind');
     await page.locator("span:text-is(' India')").click();
     await page.locator(".action__submit").click();
+
+    // Verify order placed successfully and grab ID in a variable
     await expect(page.locator('.hero-primary')).toHaveText(' Thankyou for the order. ');
     const orderText = await page.locator("label[class*='inserted']").textContent();
     const orderId = orderText.split(' | ')[1];
-    await page.locator("button[routerlink*='myorders']").click();
-    const orderBody = page.locator("tbody");
-    await orderBody.first().waitFor();
 
+    // Navigate to my orders page
+    await page.locator("button[routerlink*='myorders']").click();
+    const orderBody = page.locator("tbody tr");
+    await orderBody.first().waitFor();
     for(let i=0; i < await orderBody.count(); i++){
 
 
 
-        if(await orderBody.locator('th').nth(i).textContent() === orderId){
+        if(await orderBody.nth(i).locator('th').textContent() === orderId){
             await orderBody.nth(i).locator('button').first().click();
             break;            
         }
 
     }
-
     await page.locator('.col-text').waitFor();
+
+    // Verify order details are correct
     const finalOrder = await page.locator('.col-text').textContent();
     expect(finalOrder===orderId).toBeTruthy();
 

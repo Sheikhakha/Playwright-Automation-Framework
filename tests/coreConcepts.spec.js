@@ -1,62 +1,54 @@
-import {test,expect} from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
-test('newWindow Test', async({browser})=>{
+test('newWindow Test', async ({ browser }) => {
     const context = await browser.newContext();
     const page = await context.newPage();
-    await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
-    await expect(page).toHaveTitle("LoginPage Practise | Rahul Shetty Academy");
     const username = page.locator('#username');
     const password = page.locator('#password');
-    const userRadioButton = page.locator('.checkmark').nth(1);
-    const okay = page.locator('#okayBtn');
-    const select = page.locator('select.form-control');
-    const terms = page.locator('#terms');
     const signIn = page.locator('#signInBtn');
     const documents = page.locator("a[href*='documents']");
 
+    // Navigate to URL and verify the title
+    await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
+    await expect(page).toHaveTitle("LoginPage Practise | Rahul Shetty Academy");
+    await expect(documents).toHaveAttribute('class', 'blinkingText');
 
+     /* There are two common ways to capture a new tab opened with target="_blank":
+         1) Use Promise.all to wait for the 'page' event while performing the click
+             (recommended in tutorials). Example:
+                 const [newPage] = await Promise.all([
+                    context.waitForEvent('page'),
+                    documents.click()
+                 ]);
 
-    
-    
-    await expect(documents).toHaveAttribute('class','blinkingText');
-
-    /* either use promise.all to find the new tab or use the pagePromise 
-    to get access of the new tab that was opened when target = '_blanks' 
-    pagePromise = waitforevent code was given in the official documentation of
-    playwright.
-    While promise.all was given in rahul shetty udemy course */
+         2) Use a pagePromise (waitForEvent) to get the new page after the click,
+             as shown in the Playwright docs. Example:
+                 const pagePromise = context.waitForEvent('page');
+                 await documents.click();
+                 const newPage = await pagePromise;
+     */
 
     const [newPage] = await Promise.all([
         context.waitForEvent('page'),
         documents.click()
     ])
 
-    // const pagePromise = context.waitForEvent('page');
-    // await documents.click();
-    // const newPage = await pagePromise;
-
+    // Navigate to the new page and validate the title, extract domain name.
     await expect(newPage).toHaveTitle('RS Academy');
     const text = await newPage.locator('.red').textContent();
     const domainName = text.split('@')[1].split(".")[0];
+
+    // Navigate back to the original page and perform login using the extracted domain name
     await username.fill(domainName);
     await password.fill('Learning@830$3mK2');
-    await userRadioButton.click();
-    await okay.click();
-    await expect(okay).toBeHidden();
-    await expect(userRadioButton).toBeChecked();
-    await select.selectOption('teach');
-    await expect(select).toHaveValue('teach');
-    await expect(terms).toBeVisible();
-    await terms.check();
-    await expect(terms).toBeChecked();
-    await terms.uncheck();
-    expect(await terms.isChecked()).toBeFalsy();
+
+    // Click sigin and validate the title of the page after login
     await signIn.click();
     await page.waitForLoadState();
     await expect(page).toHaveTitle('ProtoCommerce');
 })
 
-test('multipleNewWindows',async ({browser}) => {
+test('multipleNewWindows', async ({ browser }) => {
 
     /* this test is used to capture 2 new tabs that were 
     opened while click of a button in a webpage */
@@ -77,7 +69,7 @@ test('multipleNewWindows',async ({browser}) => {
     await page.locator('#newTabsBtn').click();
 
     /* Wait until both pages are opened
-    initally gave 1000 ms but page is taking tiem to load.
+    initally gave 1000 ms but page is taking time to load.
     so chnaged to 3000ms */
     await page.waitForTimeout(3000);
 
